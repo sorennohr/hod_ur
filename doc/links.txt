@@ -3,3 +3,9 @@ Drivers:
 
 Steppers:
  - https://elektronik-lavpris.dk/files/sup224/NEMA34-02_Datasheet_2021-07-23.pdf
+
+
+Ur start position indicator:
+ - https://ardustore.dk/produkt/doer-magnet-switch-mc-38?gclid=EAIaIQobChMI_6L45aDLgAMV2oZoCR2iQw_dEAQYASABEgJ8X_D_BwE
+
+
