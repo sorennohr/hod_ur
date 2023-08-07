@@ -8,4 +8,6 @@ Steppers:
 Ur start position indicator:
  - https://ardustore.dk/produkt/doer-magnet-switch-mc-38?gclid=EAIaIQobChMI_6L45aDLgAMV2oZoCR2iQw_dEAQYASABEgJ8X_D_BwE
 
-
+Knapper:
+ - https://elektronik-lavpris.dk/p137165/swit0029-45mm-arcade-style-tryktast-roed/
+ - https://elektronik-lavpris.dk/p137166/swit0032-45mm-arcade-style-tryktast-groen/
