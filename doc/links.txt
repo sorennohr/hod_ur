@@ -1,2 +1,5 @@
 Drivers:
  - https://arduinotech.dk/shop/tb6600-stepper-motor-driver-controller-4a-942v-ttl-16-micro-step-cnc-1-axis-new-upgraded-version/?gclid=EAIaIQobChMI1ZvF4pvLgAMV0cvtCh0trg0AEAQYASABEgKFiPD_BwE
+
+Steppers:
+ - https://elektronik-lavpris.dk/files/sup224/NEMA34-02_Datasheet_2021-07-23.pdf
