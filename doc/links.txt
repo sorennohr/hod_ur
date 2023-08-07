@@ -11,3 +11,9 @@ Ur start position indicator:
 Knapper:
  - https://elektronik-lavpris.dk/p137165/swit0029-45mm-arcade-style-tryktast-roed/
  - https://elektronik-lavpris.dk/p137166/swit0032-45mm-arcade-style-tryktast-groen/
+ - https://let-elektronik.dk/big-dome-pushbutton-green?gclid=EAIaIQobChMItf2Go6jLgAMV1ep3Ch2Xeg5hEAQYBiABEgIuyvD_BwE
+
+
+Diverse:
+ - https://arduinotech.dk/shop/heat-shrinking-tubes-530-pcs-set/
+ - https://arduinotech.dk/shop/test-ledninger-mkrokodillenaeb/
