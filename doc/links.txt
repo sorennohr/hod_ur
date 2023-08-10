@@ -1,6 +1,6 @@
 Drivers:
  - https://arduinotech.dk/shop/tb6600-stepper-motor-driver-controller-4a-942v-ttl-16-micro-step-cnc-1-axis-new-upgraded-version/?gclid=EAIaIQobChMI1ZvF4pvLgAMV0cvtCh0trg0AEAQYASABEgKFiPD_BwE
-
+ - https://www.omc-stepperonline.com/digital-stepper-driver-2-4-7-2a-18-80vac-or-36-110vdc-for-nema-34-motor-dm860t
 Steppers:
  - https://elektronik-lavpris.dk/files/sup224/NEMA34-02_Datasheet_2021-07-23.pdf
  - https://www.omc-stepperonline.com/dual-shaft-nema-34-cnc-stepper-motor-8-5nm-1204oz-in-5a-86x114mm-34hs46-5004d
