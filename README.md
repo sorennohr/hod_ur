@@ -56,6 +56,8 @@ USB via iPhone oplader.
 
 ### Forsyning Motor
 
+Kunne være sådan en fyr [her](https://arduinotech.dk/shop/switching-power-supply-ac-220v-to-dc-60v-600w-10a/?gclid=EAIaIQobChMIs-Dsytf4gAMVl5JoCR2oDQL_EAQYASABEgKQpvD_BwE).
+
 ### Andet
 Ur start position indicator:
 - https://ardustore.dk/produkt/doer-magnet-switch-mc-38?gclid=EAIaIQobChMI_6L45aDLgAMV2oZoCR2iQw_dEAQYASABEgJ8X_D_BwE
@@ -70,3 +72,6 @@ Diverse:
 - https://arduinotech.dk/shop/heat-shrinking-tubes-530-pcs-set/
 - https://arduinotech.dk/shop/test-ledninger-mkrokodillenaeb/
 
+## TODO
+
+Et nødstop ville sikkert være godt - men hvordan skal sådan et kobles ind?
