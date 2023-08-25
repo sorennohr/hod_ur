@@ -48,8 +48,7 @@ Styring af en enkelt viser på ur som skal bruges på scenen af et af House Of D
 * Lead Length: 500mm
 * Weight: 5.0kg
 
-[Datasheet](/doc/34HS59-5004S.pdf)
-[Torque Curve](/doc/34HS59-5004S_Torque_Curve.pdf)
+[Datasheet](/doc/34HS59-5004S.pdf), [Torque Curve](/doc/34HS59-5004S_Torque_Curve.pdf)
 
 ### Forsyning Controller
 USB via iPhone oplader.
