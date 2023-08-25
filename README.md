@@ -51,7 +51,10 @@ Styring af en enkelt viser på ur som skal bruges på scenen af et af House Of D
 [Datasheet](/doc/34HS59-5004S.pdf)
 [Torque Curve](/doc/34HS59-5004S_Torque_Curve.pdf)
 
-### Strømforsyning
+### Forsyning Controller
+USB via iPhone oplader.
+
+### Forsyning Motor
 
 ### Andet
 Ur start position indicator:
