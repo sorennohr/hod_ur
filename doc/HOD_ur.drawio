@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-08-30T17:50:04.078Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15" etag="ZhmhfawnEtjyuM6CN5B3" version="21.6.9" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2023-08-30T17:51:48.897Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15" etag="swdwRwzbUZ3t_JOW13m6" version="21.6.9" type="github" pages="2">
   <diagram name="Logisk diagram" id="dPG3pB2D5_jtqFftoAp_">
     <mxGraphModel dx="838" dy="577" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -93,7 +93,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="NkgPXzyj2ErXrCZgj2ab-4" value="PSU#2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="NkgPXzyj2ErXrCZgj2ab-4" value="PSU#1" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="110" y="320" width="90" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NkgPXzyj2ErXrCZgj2ab-5" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" target="NkgPXzyj2ErXrCZgj2ab-4" source="S6Jj7XA6q13D-qL-5X8c-39">
