@@ -8,6 +8,10 @@ Styring af en enkelt viser på ur som skal bruges på scenen af et af House Of D
 
 ![Logisk](/doc/HOD_ur.drawio.png)
 
+### Elektrisk
+
+![Elektrisk](/doc/HOD_ur-Elektrisk.drawio.png)
+
 ## Grej
 
 ### Controller
