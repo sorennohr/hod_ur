@@ -1,0 +1,7 @@
+
+#define MOTOR_PIN_1 7
+#define MOTOR_PIN_2 6
+
+#define RESET_BUTTON_PIN 11
+#define START_POS_SWITCH_PIN 12
+

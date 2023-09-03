@@ -3,7 +3,7 @@
 
 #include "definitions.h"
 
-AccelStepper stepper(AccelStepper::DRIVER, MOTOR_PIN_1, MOTOR_PIN_2);
+AccelStepper clockArmMotor(AccelStepper::DRIVER, MOTOR_PIN_1, MOTOR_PIN_2);
 
 
 void setup() {
