@@ -3,7 +3,7 @@
 #define MOTOR_PIN_2 6
 
 #define RESET_AND_START_BUTTON_PIN            12
-#define START_POS_INDICATOR_PIN               8
+#define START_POS_INDICATOR_PIN               13
 
 #define CONTROLLER_PROGRAM_STATE_READY        1
 #define CONTROLLER_PROGRAM_STATE_RESETTING    2
@@ -15,6 +15,5 @@
 #define TASK_TYPE_DELAY                       3
 
 #define STEPS_PR_ROUND                        400
-#define ONE_ROUND                             1*STEPS_PR_ROUND
+#define ONE_FULL_ROUND                        1*STEPS_PR_ROUND
 #define REVERSE_DIRECTION                     -1
-#define ONE_TWELVETH_ROUND                    STEPS_PR_ROUND/12

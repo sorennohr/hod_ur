@@ -41,7 +41,7 @@ void doReset() {
 
   clockArmMotor.setMaxSpeed(100);
   clockArmMotor.setAcceleration(100);
-  clockArmMotor.move(ONE_ROUND);
+  clockArmMotor.move(ONE_FULL_ROUND);
 }
 
 void doReady() {
