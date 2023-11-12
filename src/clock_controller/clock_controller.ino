@@ -24,9 +24,11 @@ void setup() {
 
   // setup start/reset button 
   resetAndStartButton.setDebounceTime(50);
-  
-  // setup start indicator
+
+    // setup start position indicator
   startPositionIndicator.setDebounceTime(50);
+
+  pinMode(RESET_AND_START_BUTTON_LED_PIN, OUTPUT);
 
   // setup serial output  
   Serial.begin(9600);
@@ -39,19 +41,24 @@ void doReset() {
   log_printf("Starting reset to start position\n");
   controllerState = CONTROLLER_PROGRAM_STATE_RESETTING;
 
-  clockArmMotor.setMaxSpeed(100);
-  clockArmMotor.setAcceleration(100);
-  clockArmMotor.move(ONE_FULL_ROUND);
+  clockArmMotor.setMaxSpeed(200);
+  clockArmMotor.setAcceleration(200);
+  clockArmMotor.move(REVERSE_DIRECTION*ONE_FULL_ROUND);
 }
 
 void doReady() {
   log_printf("Ready to start sequence\n");
+  digitalWrite(RESET_AND_START_BUTTON_LED_PIN, HIGH);
   controllerState = CONTROLLER_PROGRAM_STATE_READY;
   clockArmMotor.stop();
+  clockArmMotor.setMaxSpeed(0);
+  clockArmMotor.setAcceleration(0);
+  clockArmMotor.move(0);
 }
 
 void doStartSequence() {
   log_printf("Sequence starting\n");
+  digitalWrite(RESET_AND_START_BUTTON_LED_PIN, LOW);
   controllerState = CONTROLLER_PROGRAM_STATE_RUNNING;
   currentSequenceTaskIdx = 0;
   startNextTask();
@@ -98,9 +105,10 @@ void startNextTask() {
       case TASK_TYPE_ACCELERATION:
       case TASK_TYPE_CONSTANT_SPEED:
       {
+        clockArmMotor.stop();
         clockArmMotor.setMaxSpeed(nextTask.maxSpeed);
         clockArmMotor.setAcceleration(nextTask.acceleration);
-        clockArmMotor.move(nextTask.destination);
+        clockArmMotor.move(REVERSE_DIRECTION*nextTask.destination);
         break;
       }
     }
@@ -126,8 +134,8 @@ void loop() {
   resetAndStartButton.loop();
   startPositionIndicator.loop();
 
-  bool startPositionIndicatorActivated = startPositionIndicator.isPressed();
   bool resetAndStartButtonActivated = resetAndStartButton.isPressed();
+  bool onStartPosition = startPositionIndicator.isPressed();
 
   //log_printf("state: %i, reset: %i, startPos: %i\n", controllerState, resetAndStartButtonActivated, startPositionIndicatorActivated);
 
@@ -155,7 +163,7 @@ void loop() {
     {
       clockArmMotor.run();
 
-      if (startPositionIndicatorActivated) {
+      if (onStartPosition) {
         doReady();
       }
 
