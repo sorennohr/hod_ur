@@ -11,9 +11,9 @@
 #define CONTROLLER_PROGRAM_STATE_RUNNING      3
 #define CONTROLLER_PROGRAM_STATE_DONE         4
 
-#define TASK_TYPE_ACCELERATION                1
-#define TASK_TYPE_CONSTANT_SPEED              2
-#define TASK_TYPE_DELAY                       3
+#define TASK_STATE_NOT_STARTED                0
+#define TASK_STATE_RUNNING_MOTOR              5
+#define TASK_STATE_POST_WAIT                  10
 
 #define TICKS_PR_ROUND                        12
 #define SECOND_TICKS_PR_ROUND                 60
