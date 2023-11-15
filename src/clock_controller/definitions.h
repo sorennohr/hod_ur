@@ -20,6 +20,7 @@
 #define STEPS_PR_ROUND                        1600
 #define STEPS_PR_TICK                         STEPS_PR_ROUND/TICKS_PR_ROUND
 #define STEPS_PR_SECOND_TICK                  STEPS_PR_ROUND/SECOND_TICKS_PR_ROUND
+#define STEPS_PR_HALF_SECOND_TICK             STEPS_PR_SECOND_TICK/2
 
 #define ONE_FULL_ROUND                        STEPS_PR_ROUND
 #define TICK_MAX_SPEED                        600

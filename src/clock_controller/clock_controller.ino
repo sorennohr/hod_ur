@@ -5,12 +5,6 @@
 #include "definitions.h"
 #include "sequence.h"
 
-// Log all to Serial, comment this line to disable logging
-#define LOG Serial
-
-// Include must be placed after LOG definition to work
-#include "log.h"
-
 AccelStepper clockArmMotor(AccelStepper::DRIVER, MOTOR_PIN_1, MOTOR_PIN_2);
 ezButton resetAndStartButton(RESET_AND_START_BUTTON_PIN);
 ezButton startPositionIndicator(START_POS_INDICATOR_PIN);
@@ -33,12 +27,12 @@ void setup() {
   // setup serial output  
   Serial.begin(9600);
 
-  log_printf("Setup complete\n");
+  Serial.println(F("Setup complete"));
 
 }
 
 void doReset() {
-  log_printf("Starting reset to start position\n");
+  Serial.println(F("Starting reset to start position"));
   controllerState = CONTROLLER_PROGRAM_STATE_RESETTING;
 
   clockArmMotor.setMaxSpeed(200);
@@ -47,7 +41,7 @@ void doReset() {
 }
 
 void doReady() {
-  log_printf("Ready to start sequence\n");
+  Serial.println(F("Ready to start sequence"));
   digitalWrite(RESET_AND_START_BUTTON_LED_PIN, HIGH);
   controllerState = CONTROLLER_PROGRAM_STATE_READY;
   clockArmMotor.stop();
@@ -57,7 +51,7 @@ void doReady() {
 }
 
 void doStartSequence() {
-  log_printf("Sequence starting\n");
+  Serial.println(F("Sequence starting"));
   digitalWrite(RESET_AND_START_BUTTON_LED_PIN, LOW);
   controllerState = CONTROLLER_PROGRAM_STATE_RUNNING;
   currentSequenceTaskIdx = 0;
@@ -65,14 +59,14 @@ void doStartSequence() {
 }
 
 void doEndSequence() {
-  log_printf("Sequence completed\n");
+  Serial.println(F("Sequence completed"));
   controllerState = CONTROLLER_PROGRAM_STATE_DONE;
 }
 
 bool isCurrentlyRunningTaskDone() {
     struct task currentlyRunningTask = sequence[currentSequenceTaskIdx];
 
-    switch (currentlyRunningTask.taskType) {
+    switch (currentlyRunningTask.type) {
       case TASK_TYPE_DELAY:
       {
         return delayTime.update();
@@ -92,9 +86,9 @@ void startNextTask() {
   if (currentSequenceTaskIdx < sequenceLength) {
     struct task nextTask = sequence[currentSequenceTaskIdx];
 
-    log_printf("Task [%s] starting\n", nextTask.id);
+    //log_printf("Task [%i] starting\n", nextTask.type);
 
-    switch (nextTask.taskType) {
+    switch (nextTask.type) {
       case TASK_TYPE_DELAY:
       {
         delayTime.setdelay(nextTask.delayMillis);
@@ -123,7 +117,7 @@ void doRunSequence() {
   } else {
     if (currentlyRunningTaskIsComplete) { 
       struct task completedTask = sequence[currentSequenceTaskIdx++];
-      log_printf("Task [%s] completed\n", completedTask.id);
+      //log_printf("Task [%i] completed\n", completedTask.type);
       startNextTask();
     }
   }
@@ -175,7 +169,7 @@ void loop() {
       clockArmMotor.run();
 
       if (resetAndStartButtonActivated) {
-        doReset();
+        doEndSequence();
       } else {
         doRunSequence();
       }
