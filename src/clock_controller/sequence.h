@@ -3,12 +3,25 @@
 #define SEQUENCE_H
 #include "definitions.h"
 
+#include "task.h"
+#include "step.h"
 
+class Sequence {
+  public:
 
-void setupSequence();
+    Sequence() {
+      tasks = {
+        Task(0, 1)
+      }
+    }
+
+  private:
+    Task tasks[];
+};
+
+/*void setupSequence();
 bool isSequenceDone();
-void advanceTasks();
-bool isCurrentlyRunningTaskDone();
+struct taskStep* getNextTaskStep();
 
 
 
@@ -17,15 +30,15 @@ struct taskStep
     short speed;
     short acceleration;
     short destination;
-    short postDelayMillis;
+    short delayMillis;
 };
 
 struct task 
 {
-    short state; // needed??
-    short repeat;
-    short currentStep;
-    struct taskStep taskSteps[];
+    unsigned char repeat;
+    unsigned char currentStep;
+    unsigned char stepCount;
+    struct taskStep steps[];
 };
 
 
@@ -288,14 +301,7 @@ struct task
 
 };*/
 
-struct task sequence[] = {
 
-  /* initial sleep */
-  { .state = TASK_STATE_NOT_STARTED, .repeat = 0, .currentStep = 0,
-    .taskSteps = {
-      { .speed = 0, .acceleration = 0, .destination = 0, .postDelayMillis = 2000 }
-    }
-  }
 /*
   { .type = TASK_TYPE_ACCELERATION,  .maxSpeed = SECOND_TICK_MAX_SPEED, .acceleration = SECOND_TICK_ACCELERATION, .destination = STEPS_PR_SECOND_TICK+SECOND_TICK_OVERSHOOT_STEP_COUNT, .delayMillis = 0 },
   { .type = TASK_TYPE_ACCELERATION,  .maxSpeed = SECOND_TICK_MAX_SPEED, .acceleration = SECOND_TICK_ACCELERATION, .destination = -SECOND_TICK_OVERSHOOT_STEP_COUNT, .delayMillis = 0 },
@@ -339,7 +345,7 @@ struct task sequence[] = {
   { .type = TASK_TYPE_ACCELERATION,  .maxSpeed = SECOND_TICK_MAX_SPEED, .acceleration = SECOND_TICK_ACCELERATION, .destination = -SECOND_TICK_OVERSHOOT_STEP_COUNT, .delayMillis = 0 },
  */
 
-};
+//};
 
 
 #endif

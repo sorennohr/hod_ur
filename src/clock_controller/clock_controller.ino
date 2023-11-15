@@ -11,8 +11,6 @@ ezButton startPositionIndicator(START_POS_INDICATOR_PIN);
 noDelay delayTime(0);
 
 int controllerState = CONTROLLER_PROGRAM_STATE_DONE;
-int currentSequenceTaskIdx = 0;
-
 
 void setup() {
 
@@ -27,6 +25,8 @@ void setup() {
 
   // setup serial output
   Serial.begin(9600);
+
+  //setupSequence();
 
   Serial.println(F("Setup complete"));
 }
@@ -75,7 +75,7 @@ void doReady() {
       currentlyRunningTask.state = TASK_STATE_POST_WAIT;
     }
   } else if (currentlyRunningTask.state == TASK_STATE_POST_WAIT) {
-    currentStepInTaskDone = delayTime.update();
+    currentStepInTaskDone = ;
   } else {
     Serial.println(F("Error in task state!!!"));
   }
@@ -149,7 +149,7 @@ void loop() {
     case CONTROLLER_PROGRAM_STATE_READY:
       {
         if (resetAndStartButtonActivated) {
-          // TODO!! doStartSequence();
+            controllerState = CONTROLLER_PROGRAM_STATE_RUNNING;
         }
 
         break;
@@ -173,12 +173,16 @@ void loop() {
         if (resetAndStartButtonActivated) {
           // TODO!! doEndSequence();
         } else {
-          advanceTasks();
+          /*struct taskStep* nextStep = getNextTaskStep();
+          if (nextStep == NULL) {
+              controllerState = CONTROLLER_PROGRAM_STATE_DONE;
+          }*/
+
         }
 
-        if (isSequenceDone()) {
+        /*if (isSequenceDone()) {
           controllerState = CONTROLLER_PROGRAM_STATE_DONE;
-        }
+        }*/
 
         break;
       }
