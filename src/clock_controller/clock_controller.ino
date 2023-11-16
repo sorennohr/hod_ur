@@ -32,14 +32,14 @@ void setup() {
   Serial.println(F("Setup complete"));
 }
 
-void setupNewMotorTask(short speed, short acceleration, short destination) {
+void inline setupNewMotorTask(short speed, short acceleration, short destination) {
   clockArmMotor.stop();
   clockArmMotor.setMaxSpeed(speed);
   clockArmMotor.setAcceleration(acceleration);
   clockArmMotor.move(REVERSE_DIRECTION*destination);
 }
 
-void setupNewDelayTask(short delayMillis) {
+void inline setupNewDelayTask(short delayMillis) {
   delayTime.setdelay(delayMillis);
   delayTime.start();
 }
@@ -84,46 +84,46 @@ bool isCurrentlyRunningTaskDone() {
     Serial.print(", step: ");
     Serial.println(currentTaskStep);*/
 
-    boolean stepDone = false;
     boolean repetitionDone = false;
     switch (currentTaskStep) {
       case TASK_STATE_POST_WAIT:
       {
-        stepDone = delayTime.update();
+        if (!delayTime.update()) {
+          return false;
+        }
+
+        repetitionDone = true;
         break;
       }
 
       case TASK_STATE_DEST1:
       case TASK_STATE_DEST2:
       {
-        stepDone = clockArmMotor.distanceToGo() == 0;
+        if (!clockArmMotor.distanceToGo() == 0) {
+          return false;
+        }
+
+        if (currentTaskStep == TASK_STATE_DEST1) {
+          if (currentlyRunningTask->destination2 != 0) {
+            currentTaskStep = TASK_STATE_DEST2;
+          } else if (currentlyRunningTask->postDelayMillis > 0) {
+            currentTaskStep = TASK_STATE_POST_WAIT;
+          } else {
+            repetitionDone = true;
+          }
+        } else if (currentTaskStep == TASK_STATE_DEST2) {
+          if (currentlyRunningTask->postDelayMillis > 0) {
+            currentTaskStep = TASK_STATE_POST_WAIT;
+          } else {
+            repetitionDone = true;
+          }
+        }
         break;
       }
     }
 
-    if (!stepDone) {
-      return false;
-    }
-
-    if (currentTaskStep == TASK_STATE_DEST1) {
-      if (currentlyRunningTask->destination2 != 0) {
-        currentTaskStep = TASK_STATE_DEST2;
-      } else if (currentlyRunningTask->postDelayMillis > 0) {
-        currentTaskStep = TASK_STATE_POST_WAIT;
-      } else {
-        repetitionDone = true;
-      }
-    } else if (currentTaskStep == TASK_STATE_DEST2) {
-      if (currentlyRunningTask->postDelayMillis > 0) {
-        currentTaskStep = TASK_STATE_POST_WAIT;
-      } else {
-        repetitionDone = true;
-      }
-    } else if (currentTaskStep == TASK_STATE_POST_WAIT) {
-      repetitionDone = true;
-    }
-
     if (repetitionDone) {
+        //Serial.println(F("Repetition done"));
         if (--currentlyRunningTask->repeat > 0) {
           startTaskOrRepetitionOfTask();
           return false;
@@ -136,26 +136,24 @@ bool isCurrentlyRunningTaskDone() {
 }
 
 void startTaskOrRepetitionOfTask() {
-  if (currentSequenceTaskIdx < sequenceLength) {
-    struct task taskToStartOrRepeat = sequence[currentSequenceTaskIdx];
+  struct task *taskToStartOrRepeat = &sequence[currentSequenceTaskIdx];
 
-    Serial.print(F("Starting task/repetition: "));
-    Serial.print(currentSequenceTaskIdx);
-    Serial.print(F(" / "));
-    Serial.println(taskToStartOrRepeat.repeat);
+  /*Serial.print(F("Starting task/repetition: "));
+  Serial.print(currentSequenceTaskIdx);
+  Serial.print(F(" / "));
+  Serial.println(taskToStartOrRepeat.repeat);*/
 
-    if (taskToStartOrRepeat.destination1 != 0) {
-      setupNewMotorTask(taskToStartOrRepeat.speed, taskToStartOrRepeat.acceleration, taskToStartOrRepeat.destination1);
-      currentTaskStep = TASK_STATE_DEST1;
-    } else if (taskToStartOrRepeat.destination2 != 0) {
-      setupNewMotorTask(taskToStartOrRepeat.speed, taskToStartOrRepeat.acceleration, taskToStartOrRepeat.destination2);
-      currentTaskStep = TASK_STATE_DEST2;
-    } else if (taskToStartOrRepeat.postDelayMillis > 0) {
-      setupNewDelayTask(taskToStartOrRepeat.postDelayMillis);
-      currentTaskStep = TASK_STATE_POST_WAIT;
-    } else {
-      Serial.println(F("Error - got empty task, "));
-    }
+  if (taskToStartOrRepeat->destination1 != 0) {
+    setupNewMotorTask(taskToStartOrRepeat->speed, taskToStartOrRepeat->acceleration, taskToStartOrRepeat->destination1);
+    currentTaskStep = TASK_STATE_DEST1;
+  } else if (taskToStartOrRepeat->destination2 != 0) {
+    setupNewMotorTask(taskToStartOrRepeat->speed, taskToStartOrRepeat->acceleration, taskToStartOrRepeat->destination2);
+    currentTaskStep = TASK_STATE_DEST2;
+  } else if (taskToStartOrRepeat->postDelayMillis > 0) {
+    setupNewDelayTask(taskToStartOrRepeat->postDelayMillis);
+    currentTaskStep = TASK_STATE_POST_WAIT;
+  } else {
+    Serial.println(F("Error - got empty task"));
   }
 }
 
@@ -167,7 +165,8 @@ void doRunSequence() {
   } else {
     if (currentlyRunningTaskIsComplete) { 
       /*Serial.print(F("Task completed: "));
-      Serial.println(currentSequenceTaskIdx++);*/
+      Serial.println(currentSequenceTaskIdx);*/
+      currentSequenceTaskIdx++;
       startTaskOrRepetitionOfTask();
     }
   }
