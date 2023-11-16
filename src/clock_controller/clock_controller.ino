@@ -12,6 +12,7 @@ noDelay delayTime(0);
 
 int controllerState = CONTROLLER_PROGRAM_STATE_DONE;
 int currentSequenceTaskIdx = 0;
+int currentTaskStep = TASK_STATE_INIT;
 
 
 void setup() {
@@ -55,6 +56,7 @@ void doStartSequence() {
   digitalWrite(RESET_AND_START_BUTTON_LED_PIN, LOW);
   controllerState = CONTROLLER_PROGRAM_STATE_RUNNING;
   currentSequenceTaskIdx = 0;
+  currentTaskStep = TASK_STATE_INIT;
   startNextTask();
 }
 
@@ -66,23 +68,57 @@ void doEndSequence() {
 bool isCurrentlyRunningTaskDone() {
     struct task currentlyRunningTask = sequence[currentSequenceTaskIdx];
 
-    switch (currentlyRunningTask.type) {
-      case TASK_TYPE_DELAY:
+    boolean stepDone = false;
+    boolean repetitionDone = false;
+    switch (currentTaskStep) {
+      case TASK_STATE_POST_WAIT:
       {
-        return delayTime.update();
+        stepDone = delayTime.update();
         break;
       }
 
-      case TASK_TYPE_ACCELERATION:
-      case TASK_TYPE_CONSTANT_SPEED:
+      case TASK_STATE_DEST1:
+      case TASK_STATE_DEST2:
       {
-        return clockArmMotor.distanceToGo() == 0;
+        stepDone = clockArmMotor.distanceToGo() == 0;
         break;
       }
     }
+
+    if (!stepDone) {
+      return false;
+    }
+
+    if (currentTaskStep == TASK_STATE_DEST1) {
+      if (currentlyRunningTask.destination2 != 0) {
+        currentTaskStep = TASK_STATE_DEST2;
+      } else if (currentlyRunningTask.postDelayMillis > 0) {
+        currentTaskStep = TASK_STATE_POST_WAIT;
+      } else {
+        repetitionDone = true;
+      }
+    }
+
+    if (currentTaskStep == TASK_STATE_DEST2) {
+      if (currentlyRunningTask.postDelayMillis > 0) {
+        currentTaskStep = TASK_STATE_POST_WAIT;
+      } else {
+        repetitionDone = true;
+      }
+    }
+
+    if (repetitionDone) {
+        if (--currentlyRunningTask.repeat > 0) {
+          // TODO start igen1
+
+          return false;
+        }
+    }
+
+    return true;
 }
 
-void startNextTask() {
+void startTaskOrRepetitionOfTask() {
   if (currentSequenceTaskIdx < sequenceLength) {
     struct task nextTask = sequence[currentSequenceTaskIdx];
 

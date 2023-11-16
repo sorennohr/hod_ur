@@ -5,15 +5,26 @@
 
 struct task 
 {
-    byte type;
-    short maxSpeed;
+    short speed;
     short acceleration;
-    short destination;
-    short delayMillis;
+    short destination1;
+    short destination2;
+    short postDelayMillis;
+    short repeat;
 };
 
-
 struct task sequence[] = {
+
+  /* initial sync. wait */
+  { .speed = 0, .acceleration = 0, .destination1 = 0, .destination2 = 0, .postDelayMillis = 2000, repeat = 1 },
+
+  /* first single step */
+  { .speed = SECOND_TICK_MAX_SPEED, .acceleration = SECOND_TICK_ACCELERATION, .destination1 = STEPS_PR_SECOND_TICK+SECOND_TICK_OVERSHOOT_STEP_COUNT, .destination2 = -SECOND_TICK_OVERSHOOT_STEP_COUNT, .postDelayMillis = 3600, repeat = 1 },
+
+
+};
+
+/*struct task sequence[] = {
   
   { .type = TASK_TYPE_DELAY, .maxSpeed = 0, .acceleration = 0, .destination = 0, .delayMillis = 2000 },
 
@@ -270,7 +281,7 @@ struct task sequence[] = {
 
 
 
-};
+};*/
 
 
 
