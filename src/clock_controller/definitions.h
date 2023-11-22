@@ -3,17 +3,19 @@
 #define MOTOR_PIN_2 6
 
 #define START_POS_INDICATOR_PIN               5
+#define SYSTEM_RESET_PIN                      10
 #define RESET_AND_START_BUTTON_PIN            12
 #define RESET_AND_START_BUTTON_LED_PIN        13
 
 #define CONTROLLER_PROGRAM_STATE_READY        1
 #define CONTROLLER_PROGRAM_STATE_RESETTING    2
 #define CONTROLLER_PROGRAM_STATE_RUNNING      3
-#define CONTROLLER_PROGRAM_STATE_DONE         4
+#define CONTROLLER_PROGRAM_STATE_INIT         4
 
-#define TASK_TYPE_ACCELERATION                1
-#define TASK_TYPE_CONSTANT_SPEED              2
-#define TASK_TYPE_DELAY                       3
+#define TASK_STATE_INIT                       0
+#define TASK_STATE_DEST1                      1
+#define TASK_STATE_DEST2                      2
+#define TASK_STATE_POST_WAIT                  3
 
 #define TICKS_PR_ROUND                        12
 #define SECOND_TICKS_PR_ROUND                 60
