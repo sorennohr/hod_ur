@@ -13,18 +13,13 @@ ezButton resetAndStartButton(RESET_AND_START_BUTTON_PIN);
 ezButton startPositionIndicator(START_POS_INDICATOR_PIN);
 noDelay delayTime(0);
 
-int controllerState = CONTROLLER_PROGRAM_STATE_DONE;
+int controllerState = CONTROLLER_PROGRAM_STATE_INIT;
 int currentSequenceTaskIdx = 0;
 int currentTaskStep = TASK_STATE_INIT;
 
-/* TODO:
-    * reset / end issue - hvorfor kan vi ikke starte igen????
-*/
-
-
 void setup() {
 
-  controllerState = CONTROLLER_PROGRAM_STATE_DONE;
+  controllerState = CONTROLLER_PROGRAM_STATE_INIT;
   currentSequenceTaskIdx = 0;
   currentTaskStep = TASK_STATE_INIT;
 
@@ -36,6 +31,10 @@ void setup() {
 
   // setup start/reset button LED pin
   pinMode(RESET_AND_START_BUTTON_LED_PIN, OUTPUT);
+
+  // setup system reset pin
+  digitalWrite(SYSTEM_RESET_PIN, HIGH);
+  pinMode(SYSTEM_RESET_PIN, OUTPUT);
 
 #ifdef LOG
   // setup serial output  
@@ -56,11 +55,9 @@ void inline setupNewDelayTask(short delayMillis) {
   delayTime.start();
 }
 
-void(* resetProgram) (void) = 0; //declare reset function @ address 0
-
-void doReset() {
+void doGoToStartPosition() {
 #ifdef LOG
-  Serial.println(F("Starting reset to start position"));
+  Serial.println(F("Running to start position"));
 #endif
 
   controllerState = CONTROLLER_PROGRAM_STATE_RESETTING;
@@ -79,7 +76,8 @@ void doReady() {
 
 void doStartSequence() {
 #ifdef LOG
-  Serial.println(F("Sequence starting"));
+  Serial.print(F("Sequence starting, steps in sequence: "));
+  Serial.println(sequenceLength);
 #endif
 
   digitalWrite(RESET_AND_START_BUTTON_LED_PIN, LOW);
@@ -90,19 +88,21 @@ void doStartSequence() {
   startTaskOrRepetitionOfTask();
 }
 
-void doEndSequence() {
+void doSystemReset() {
 #ifdef LOG
-  Serial.println(F("Sequence completed"));
+  Serial.println(F("Resetting...."));
 #endif
 
-  controllerState = CONTROLLER_PROGRAM_STATE_DONE;
-  setupNewMotorTask(0, 0, 0);
-
-  resetProgram();
+  digitalWrite(SYSTEM_RESET_PIN, LOW);
 }
 
 bool isCurrentlyRunningTaskDone() {
-    struct task *currentlyRunningTask = &sequence[currentSequenceTaskIdx];
+  if (currentSequenceTaskIdx >= sequenceLength) {
+    doSystemReset();
+    return false;
+  }
+
+  struct task *currentlyRunningTask = &sequence[currentSequenceTaskIdx];
 
 #ifdef VERBOSE_LOG
     Serial.print("Is done,  task: ");
@@ -167,6 +167,11 @@ bool isCurrentlyRunningTaskDone() {
 }
 
 void startTaskOrRepetitionOfTask() {
+  if (currentSequenceTaskIdx >= sequenceLength) {
+    doSystemReset();
+    return;
+  }
+
   struct task *taskToStartOrRepeat = &sequence[currentSequenceTaskIdx];
 
 #ifdef VERBOSE_LOG
@@ -193,12 +198,6 @@ void startTaskOrRepetitionOfTask() {
 }
 
 void doRunSequence() {
-
-  if (currentSequenceTaskIdx >= sequenceLength) {
-    doEndSequence();
-    return;
-  }
-
   bool currentlyRunningTaskIsComplete = isCurrentlyRunningTaskDone();
 
   if (currentlyRunningTaskIsComplete) { 
@@ -221,10 +220,10 @@ void loop() {
 
   switch(controllerState)
   {
-    case CONTROLLER_PROGRAM_STATE_DONE:
+    case CONTROLLER_PROGRAM_STATE_INIT:
     {
       if (resetAndStartButtonActivated) {
-        doReset();
+        doGoToStartPosition();
       }
 
       break;
@@ -243,11 +242,18 @@ void loop() {
     {
       if (!clockArmMotor.run()) {
         // we never got to start-pos, but better to be able to start from where we ended....
-        controllerState = CONTROLLER_PROGRAM_STATE_READY;
+        doReady();
+        break;
       }
 
       if (onStartPosition) {
         doReady();
+        break;
+      }
+
+      if (resetAndStartButtonActivated) {
+        doSystemReset();
+        break;
       }
 
       break;
@@ -255,11 +261,10 @@ void loop() {
 
     case CONTROLLER_PROGRAM_STATE_RUNNING:
     {
-      clockArmMotor.run();
-
-      if (resetAndStartButtonActivated) {
-        doEndSequence();
+      if (resetAndStartButtonActivated) {  
+        doSystemReset();
       } else {
+        clockArmMotor.run();
         doRunSequence();
       }
 
