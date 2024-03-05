@@ -5,12 +5,11 @@
 #include "definitions.h"
 #include "sequence.h"
 
-#define LOG
+//#define LOG
 //#define VERBOSE_LOG
 
 AccelStepper clockArmMotor(AccelStepper::DRIVER, MOTOR_PIN_1, MOTOR_PIN_2);
 ezButton resetAndStartButton(RESET_AND_START_BUTTON_PIN);
-ezButton startPositionIndicator(START_POS_INDICATOR_PIN);
 noDelay delayTime(0);
 
 int controllerState = CONTROLLER_PROGRAM_STATE_INIT;
@@ -25,9 +24,6 @@ void setup() {
 
   // setup start/reset button 
   resetAndStartButton.setDebounceTime(25);
-
-  // setup start position indicator
-  startPositionIndicator.setDebounceTime(10);
 
   // setup start/reset button LED pin
   pinMode(RESET_AND_START_BUTTON_LED_PIN, OUTPUT);
@@ -61,7 +57,7 @@ void doGoToStartPosition() {
 #endif
 
   controllerState = CONTROLLER_PROGRAM_STATE_RESETTING;
-  setupNewMotorTask(140, 200, ONE_FULL_ROUND*2.5);
+  setupNewMotorTask(140, 200, ONE_HALF_ROUND);
 }
 
 void doReady() {
@@ -213,10 +209,8 @@ void doRunSequence() {
 void loop() {
   
   resetAndStartButton.loop();
-  startPositionIndicator.loop();
 
   bool resetAndStartButtonActivated = resetAndStartButton.isPressed();
-  bool onStartPosition = startPositionIndicator.isPressed();
 
   switch(controllerState)
   {
@@ -242,11 +236,6 @@ void loop() {
     {
       if (!clockArmMotor.run()) {
         // we never got to start-pos, but better to be able to start from where we ended....
-        doReady();
-        break;
-      }
-
-      if (onStartPosition) {
         doReady();
         break;
       }

@@ -25,6 +25,8 @@
 #define STEPS_PR_HALF_SECOND_TICK             STEPS_PR_SECOND_TICK/2
 
 #define ONE_FULL_ROUND                        STEPS_PR_ROUND
+#define ONE_HALF_ROUND                        STEPS_PR_ROUND/2
+
 #define TICK_MAX_SPEED                        600
 #define TICK_ACCELERATION                     1000    
 #define TICK_OVERSHOOT_STEP_COUNT             3
